@@ -235,7 +235,7 @@ class StorageFilesystem {
      * 
      * @return string path
      */
-    protected static function buildPath(File $file) {
+    public static function buildPath(File $file) {
         self::setup();
         
         $path = self::$path;
@@ -337,28 +337,29 @@ class StorageFilesystem {
         // Open file for writing
         $mode = file_exists($file_path) ? 'rb+' : 'wb+'; // Create file if it does not exist
         if($fh = fopen($file_path, $mode)) {
-            if(flock($fh, LOCK_EX)) { // Try to lock for writing
-                // Sets position of file pointer
-                if($offset) {
-                    fseek($fh, $offset); // Known offset
-                }else if(is_null($offset)) {
-                    fseek($fh, 0, SEEK_END); // End of file if no offset given
-                }
-                
-                // Get offset
-                $offset = ftell($fh);
-                
-                // Try to write chunk
-                $written = fwrite($fh, $data);
-                
-                fflush($fh); // Flush file buffer before releasing lock
-                
-                flock($fh, LOCK_UN); // Unlock file
-            } else throw new StorageFilesystemCannotWriteException($file_path.' (lock)', $file);
-            
+            // Sets position of file pointer
+            if($offset) {
+                fseek($fh, $offset); // Known offset
+            }else if(is_null($offset)) {
+                fseek($fh, 0, SEEK_END); // End of file if no offset given
+            }
+
+            // Get offset
+            $offset = ftell($fh);
+
+            // Try to write chunk
+            $written = fwrite($fh, $data, $chunk_size);
+
             // Close writer
-            fclose($fh);
-            
+            if (!fclose($fh)) {
+                throw new StorageFilesystemCannotWriteException($file_path.' (lock)', $file);
+            }
+
+            if( $chunk_size != $written ) {
+                Logger::info('writeChunk() Can not write to : '.$chunkFile);
+                throw new StorageFilesystemCannotWriteException('writeChunk( '.$file_path, $file, $data, $offset, $written );
+            }
+
             return array(
                 'offset' => $offset,
                 'written' => $written
@@ -496,4 +497,9 @@ class StorageFilesystem {
         symlink($source_path, self::buildPath($file).$file->uid);
     }
 
+    public static function getStream(File $file) {
+        $file_path = self::buildPath($file).$file->uid;
+        $stream = fopen($file_path,'r');
+        return $stream;
+    }
 }
