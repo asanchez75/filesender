@@ -6,19 +6,19 @@
     "license": "BSD 3-Clause License",
     "authors": [
         {
-            "name": "Chris Richter",
+            "name": "Chris Richter"
         },
         {
-            "name": "Guido Aben",
+            "name": "Guido Aben"
         },
         {
-            "name": "Jan Meijer",
+            "name": "Jan Meijer"
         },
         {
-            "name": "Wendy Mason",
+            "name": "Wendy Mason"
         },
         {
-            "name": "Xander Jansen",
+            "name": "Xander Jansen"
         }
     ],
     "require": {
