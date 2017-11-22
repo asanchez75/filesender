@@ -1,4 +1,26 @@
 {
+    "name": "asanchez75/filesender",
+    "description": "FileSender is a web based application that allows authenticated users to securely and easily send arbitrarily large files to other users",
+    "keywords": ["large files", "mailinglist"],
+    "type": "library",
+    "license": "BSD 3-Clause License",
+    "authors": [
+        {
+            "name": "Chris Richter",
+        },
+        {
+            "name": "Guido Aben",
+        },
+        {
+            "name": "Jan Meijer",
+        },
+        {
+            "name": "Wendy Mason",
+        },
+        {
+            "name": "Xander Jansen",
+        }
+    ],
     "require": {
         "sauce/sausage": "0.14.0",
         "appium/php-client": "@dev",
@@ -7,5 +29,9 @@
         "phpunit/phpunit-mock-objects": "2.3.8",
         "phpunit/php-code-coverage": "2.2.4",
         "sebastian/version": "1.0.6"
-    }
+    },
+    "autoload": {
+        "classmap": ["classes/"],
+        "exclude-from-classmap": ["classes/autoload.php"]
+    },
 }
