@@ -33,5 +33,5 @@
     "autoload": {
         "classmap": ["classes/"],
         "exclude-from-classmap": ["classes/autoload.php"]
-    },
+    }
 }
